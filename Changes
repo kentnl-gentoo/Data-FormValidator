@@ -1,3 +1,34 @@
+3.70 Tue Jul 19 21:02:06 EST 2005
+
+    [ENHANCEMENTS]
+    - DFV::Constraints::Upload can now be used with CGI::Simple (David Emery)
+
+    - success() method added to Results object. This is an easy way to check
+      that there were no missing or invalid fields. (Michael Peters).  To make
+      an even more compact syntax, you can simply use the $results object in a
+      boolean context to check for success. The CGI::Application ValidateRM
+      plugin will make use of this. 
+
+    - 'separator' was misspelled consistently in the the docs, code and tests.
+      The proper spelling as well as the legacy typo spelling are now
+      supported, although the typo'ed version is no longer documented, except
+      for here. :) Thanks to Terrence Brannon for spotting this.
+
+    - Documentation and test improvements related to missing_optional_valid
+
+    - Update CA province codes (Steve Simms)
+
+   [BUG FIXES]
+   - Possibly fix mod_perl/CGI.pm reloading bug
+
+   [INTERNALS]
+   - Location of public darcs repo is mentioned in the docs
+
+   - A new test was added to check that no warnings are emitted when an untainted
+      constraint returns undef (Michael Peters)
+  
+   - Several test updates and documentation improvements. 
+
 3.63
 	[BUG FIXES]
     - email validation was beefed up to not permit spaces with e-mails 

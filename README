@@ -118,9 +118,10 @@ VALIDATING INPUT
         parts of the validation profile that you might like to re-use for
         many form validations.
 
-        To facilite this, "new()" takes a second argument, a hash reference.
-        Here the usual input profile definitions can be made. These will act
-        as defaults for any subsequent calls to "check()" on this object.
+        To facilitate this, "new()" takes a second argument, a hash
+        reference. Here the usual input profile definitions can be made.
+        These will act as defaults for any subsequent calls to "check()" on
+        this object.
 
         Currently the logic for this is very simple. Any definition of a key
         in your validation profile will completely overwrite your default
@@ -441,9 +442,9 @@ INPUT PROFILE SPECIFICATION
   missing_optional_valid
      missing_optional_valid => 1
 
-    This can be set to a true value to cause missing optional fields to be
-    included in the valid hash. By default they are not included-- this is
-    the historical behavior.
+    This can be set to a true value to cause optional fields with empty
+    values to be included in the valid hash. By default they are not
+    included-- this is the historical behavior.
 
     This is an important flag if you are using the contents of an "update"
     form to update a record in a database. Without using the option, fields
@@ -465,10 +466,6 @@ INPUT PROFILE SPECIFICATION
     Data::FormValidator::Constraints documentation for more information
 
   msgs
-    NOTE: This part of the interface is newer and may change. Use in
-    production code at your own caution. Contact the maintainer with any
-    questions or suggestions.
-
     This key is used to define parameters related to formatting error
     messages returned to the user.
 
@@ -504,9 +501,9 @@ INPUT PROFILE SPECIFICATION
          # Default invalid message, default's to "Invalid"
          invalid => 'Problematic!',
  
-         # message seperator for multiple messages
+         # message separator for multiple messages
          # Defaults to ' '
-         invalid_seperator => ' <br /> ',
+         invalid_separator => ' <br /> ',
  
          # formatting string, default given above.
          format => 'ERROR: %s',
@@ -638,10 +635,9 @@ SEE ALSO
 
     Related modules:
 
-    Data::FormValidator::Util::HTML
+    Data::FormValidator::Tutorial
 
-    Data::FormValidator::Tutorial is now out of date. The sample application
-    above may be a more useful introduction.
+    Data::FormValidator::Util::HTML
 
     CGI::Application::ValidateRM, a CGI::Application & Data::FormValidator
     glue module
@@ -674,6 +670,11 @@ CREDITS
 
 BUGS
     <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-FormValidator>
+
+CONTRIBUTING
+    Patches, questions and feedback are welcome. This project is managed
+    using the darcs source control system ( http://www.darcs.net/ ). My
+    darcs archive is here: http://mark.stosberg.com/darcs_hive/dfv/
 
 AUTHOR
     Parts Copyright 2001-2003 by Mark Stosberg <markstos@cpan.org>, (Current

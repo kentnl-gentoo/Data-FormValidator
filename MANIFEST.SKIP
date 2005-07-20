@@ -13,3 +13,6 @@
 ^notes
 ^releases
 .swp$
+^_darcs/
+^Build$
+^_build

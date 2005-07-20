@@ -31,7 +31,7 @@ use Data::FormValidator::Constraints (qw/:validators :matchers/);
 
 use vars qw( $VERSION $AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS );
 
-$VERSION = '3.63';
+$VERSION = '3.70';
 
 require Exporter;
 @ISA = qw(Exporter);
@@ -268,7 +268,7 @@ Applying defaults to more than one input profile. There are some parts
 of the validation profile that you might like to re-use for many form
 validations. 
 
-To facilite this, C<new()> takes a second argument, a hash reference. Here
+To facilitate this, C<new()> takes a second argument, a hash reference. Here
 the usual input profile definitions can be made. These will act as defaults for
 any subsequent calls to C<check()> on this object.
 
@@ -676,9 +676,9 @@ This overrides the untaint_all_constraints flag.
 
  missing_optional_valid => 1
 
-This can be set to a true value to cause missing optional fields to be included
-in the valid hash. By default they are not included-- this is the historical
-behavior. 
+This can be set to a true value to cause optional fields with empty values to
+be included in the valid hash. By default they are not included-- this is the
+historical behavior. 
 
 This is an important flag if you are using the contents of an "update" form to
 update a record in a database. Without using the option, fields that have been
@@ -700,10 +700,6 @@ See L<WRITING YOUR OWN CONSTRAINT ROUTINES> in the Data::FormValidator::Constrai
 documentation for more information
 
 =head2 msgs
-
-B<NOTE:> This part of the interface is newer and may change.  Use in production
-code at your own caution. Contact the maintainer with any questions or
-suggestions.
 
 This key is used to define parameters related to formatting error messages
 returned to the user.
@@ -737,9 +733,9 @@ as providing custom messages per field, and handling multiple constraints:
      # Default invalid message, default's to "Invalid"
      invalid => 'Problematic!',
  
-     # message seperator for multiple messages
+     # message separator for multiple messages
      # Defaults to ' '
-     invalid_seperator => ' <br /> ',
+     invalid_separator => ' <br /> ',
  
      # formatting string, default given above.
      format => 'ERROR: %s',
@@ -971,10 +967,9 @@ Validating Web Forms with Perl, L<http://mark.stosberg.com/Tech/perl/form-valida
 
 B<Related modules:>
 
-L<Data::FormValidator::Util::HTML|Data::FormValidator::Util::HTML>
+L<Data::FormValidator::Tutorial|Data::FormValidator::Tutorial> 
 
-L<Data::FormValidator::Tutorial|Data::FormValidator::Tutorial> is now out of date.
-The sample application above may be a more useful introduction. 
+L<Data::FormValidator::Util::HTML|Data::FormValidator::Util::HTML>
 
 L<CGI::Application::ValidateRM|CGI::Application::ValidateRM>, a
 CGI::Application & Data::FormValidator glue module
@@ -1014,6 +1009,12 @@ Albrecht to the MiniVend program.
 =head1 BUGS
 
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-FormValidator> 
+
+=head1 CONTRIBUTING
+
+Patches, questions and feedback are welcome. This project is managed using
+the darcs source control system ( http://www.darcs.net/ ). My darcs archive is here:
+http://mark.stosberg.com/darcs_hive/dfv/
 
 =head1 AUTHOR
 

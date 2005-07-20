@@ -19,8 +19,12 @@ use Symbol;
 use Data::FormValidator::Filters qw/:filters/;
 use Data::FormValidator::Constraints (qw/:validators :matchers/);
 use vars qw/$AUTOLOAD $VERSION/;
+use overload
+  'bool' => \&_bool_overload_based_on_success;
 
-$VERSION = 3.59;
+
+
+$VERSION = 3.70;
 
 =pod
 
@@ -338,7 +342,7 @@ sub _process {
 			# set current constraint field for use by get_current_constraint_field
 			$self->{__CURRENT_CONSTRAINT_FIELD} = $field;
 
-			my $c = $self->_constraint_hash_build($field,$constraint_spec,$untaint_this);
+			my $c = $self->_constraint_hash_build($constraint_spec,$untaint_this);
 
 			my $is_value_list = 1 if (ref $valid{$field} eq 'ARRAY');
 			if ($is_value_list) {
@@ -404,6 +408,24 @@ sub _process {
 
 =pod
 
+=head1  success();
+
+This method returns true if there were no invalid or missing fields,
+else it returns false.
+
+As a shorthand, When the $results object is used in boolean context, it is overloaded
+to use the value of success() instead. That allows creation of a syntax like this one used
+in C<CGI::Application::Plugin::ValidateRM>:
+
+ my $results = $self->check_rm('form_display','_form_profile') || return $self->dfv_error_page;
+
+=cut
+
+sub success {
+    my $self = shift;
+    return !($self->has_invalid || $self->has_missing);
+}
+
 =head1  valid( [[field] [, value]] );
 
 In an array context with no arguments, it returns the list of fields which 
@@ -454,7 +476,7 @@ sub valid {
 
 =head1 has_missing()
 
-This method returns true if the results contains missing fields.
+This method returns true if the results contain missing fields.
 
 =cut
 
@@ -485,7 +507,7 @@ sub missing {
 
 =head1 has_invalid()
 
-This method returns true if the results contains fields with invalid
+This method returns true if the results contain fields with invalid
 data.
 
 =cut
@@ -520,7 +542,7 @@ sub invalid {
 
 =head1 has_unknown()
 
-This method returns true if the results contains unknown fields.
+This method returns true if the results contain unknown fields.
 
 =cut
 
@@ -559,7 +581,7 @@ is determined by parameters in the C<msgs> area of the validation profile,
 described in the L<Data::FormValidator> documentation.
 
 This method takes one possible parameter, a hash reference containing the same 
-options that you can define in the validation profile. This allows you to seperate
+options that you can define in the validation profile. This allows you to separate
 the controls for message display from the rest of the profile. While validation profiles
 may be different for every form, you may wish to format messages the same way
 across many projects.
@@ -580,18 +602,31 @@ sub msgs {
 
 	# Allow msgs to be called more than one to accumulate error messages
 	$self->{msgs} ||= {};
-	$self->{profile}->{msgs} ||= {};
+	$self->{profile}{msgs} ||= {};
 	$self->{msgs} = { %{ $self->{msgs} }, %$controls };
+
+    # Legacy typo support. 
+    for my $href ($self->{msgs}, $self->{profile}{msgs}) {
+        if (
+             (not defined $href->{invalid_separator}) 
+             &&  (defined $href->{invalid_seperator})
+         ) {
+            $href->{invalid_separator} = $href->{invalid_seperator};
+        }
+    }
 
 	my %profile = (
 		prefix	=> '',
 		missing => 'Missing',
 		invalid	=> 'Invalid',
-		invalid_seperator => ' ',
+		invalid_separator => ' ',
+
 		format  => '<span style="color:red;font-weight:bold"><span class="dfv_errors">* %s</span></span>',
 		%{ $self->{msgs} },
-		%{ $self->{profile}->{msgs} },
+		%{ $self->{profile}{msgs} },
 	);
+
+
 	my %msgs = ();
 
 	# Add invalid messages to hash
@@ -600,7 +635,7 @@ sub msgs {
 	if ($self->has_invalid) {
 		my $invalid = $self->invalid;
 		for my $i ( keys %$invalid ) {
-			$msgs{$i} = join $profile{invalid_seperator}, map {
+			$msgs{$i} = join $profile{invalid_separator}, map {
 				_error_msg_fmt($profile{format},($profile{constraints}{$_} || $profile{invalid}))
 				} @{ $invalid->{$i} };
 		}
@@ -796,8 +831,8 @@ sub _filter_apply {
 }
 
 sub _constraint_hash_build {
-	my ($self,$field,$constraint_spec,$untaint_this) = @_;
-	die "_constraint_apply received wrong number of arguments" unless (scalar @_ == 4);
+	my ($self,$constraint_spec,$untaint_this) = @_;
+	die "_constraint_hash_build received wrong number of arguments" unless (scalar @_ == 3);
 
 	my	$c = {
 			name 		=> $constraint_spec,
@@ -924,12 +959,9 @@ sub _get_data {
 	$self->{__INPUT_DATA} = $data;
 	require UNIVERSAL;
 
-    # This checks whether we have an object or not.
-    if (UNIVERSAL::isa($data,'UNIVERSAL') ) {
+    # This checks whether we have an object that supports param
+    if (UNIVERSAL::can($data,'param') ) {
 		my %return;
-		# make sure object supports param()
-		defined($data->UNIVERSAL::can('param')) or
-		die "Data::FormValidator->validate() or check() called with an object which lacks a param() method!";
 		foreach my $k ($data->param()){
 			# we expect param to return an array if there are multiple values
 			my @v = $data->param($k);
@@ -938,8 +970,11 @@ sub _get_data {
 		return %return;
 	}
 	# otherwise, it's already a hash reference
-	else {
+    elsif (ref $data eq 'HASH') {
 		return %$data;	
+    }
+	else {
+		die "Data::FormValidator->validate() or check() called with invalid input data structure.";
 	}
 }
 
@@ -955,6 +990,11 @@ sub _create_regexp_common_constraint  {
 	no strict "refs";
 	my $re = &$re_name(-keep=>1,@params) || die 'no matching Regexp::Common routine found';
 	return ($self->get_current_constraint_value =~ qr/^$re$/) ? $1 : undef; 
+}
+
+sub _bool_overload_based_on_success {
+    my $results = shift;
+    return $results->success()
 }
 
 

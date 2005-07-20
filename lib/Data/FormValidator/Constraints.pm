@@ -24,7 +24,7 @@ package Data::FormValidator::Constraints;
 use strict;
 use vars qw/$AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS $VERSION/;
 
-$VERSION = 3.63;
+$VERSION = 3.70;
 
 require Exporter;
 @ISA = qw(Exporter);
@@ -113,8 +113,11 @@ In an Data::FormValidator profile:
 
 =head1 DESCRIPTION
 
-Those are the builtin constraints that can be specified by name in the input
+These are the builtin constraints that can be specified by name in the input
 profiles. 
+
+Be sure to check out the SEE ALSO section for even more pre-packaged
+constraints you can use.
 
 =cut
 
@@ -138,14 +141,11 @@ sub AUTOLOAD {
 
 =item email
 
-Checks if the email LOOKS LIKE an email address. This checks if the
-input contains one @, and a two level domain name. The address portion
-is checked quite liberally. For example, all those probably invalid
-address would pass the test :
+Checks if the email LOOKS LIKE an email address. This should be sufficient
+99% of the time. 
 
-    nobody@top.domain
-    %?&/$()@nowhere.net
-    guessme@guess.m
+Look elsewhere if you want something super fancy that matches every possible variation
+that is valid in the RFC, or runs out and checks some MX records.
 
 =cut
 
@@ -171,7 +171,7 @@ SC SD TN TX UT VT VA WA WV WI WY DC AP FP FPO APO GU VI
 EOF
 
 my $province = <<EOF;
-AB BC MB NB NF NS NT ON PE QC SK YT YK
+AB BC MB NB NF NL NS NT NU ON PE QC SK YT YK
 EOF
 
 =pod
@@ -619,9 +619,16 @@ of that method.
 
 =head1 SEE ALSO
 
-Data::FormValidator(3), Data::FormValidator::Filters(3),
-Data::FormValidator::ConstraintsFactory(3),
-L<Regexp::Common>
+L<Data::FormValidator::Constraints::Upload> - validate the bytes, format and dimensions of file uploads,
+L<Data::FormValidator::Constraints::DateTime> - 
+  A newer DateTime constraint module. May save you a step of tranforming the date into
+  a more useful format after it's validated. 
+L<Data::FormValidator::Constraints::Dates> - the original DFV date constraint module
+L<Regexp::Common> -- lost of useful regular expressions to choose from!
+
+L<Data::FormValidator>
+L<Data::FormValidator::Filters>
+L<Data::FormValidator::ConstraintsFactory>
 
 =head1 CREDITS
 
@@ -629,22 +636,22 @@ Some of those input validation functions have been taken from MiniVend
 by Michael J. Heins <mike@heins.net>
 
 The credit card checksum validation was taken from contribution by
-Bruce Albrecht <bruce.albrecht@seag.fingerhut.com> to the MiniVend
-program.
+Bruce Albrecht to the MiniVend program.
 
 =head1 AUTHORS
 
-    Francis J. Lacoste <francis.lacoste@iNsu.COM>
-    Michael J. Heins <mike@heins.net>
-    Bruce Albrecht  <bruce.albrecht@seag.fingerhut.com>
+    Francis J. Lacoste 
+    Michael J. Heins 
+    Bruce Albrecht  
+    Mark Stosberg
 
 =head1 COPYRIGHT
 
 Copyright (c) 1999 iNsu Innovations Inc.
 All rights reserved.
 
-Parts Copyright 1996-1999 by Michael J. Heins <mike@heins.net>
-Parts Copyright 1996-1999 by Bruce Albrecht  <bruce.albrecht@seag.fingerhut.com>
+Parts Copyright 1996-1999 by Michael J. Heins 
+Parts Copyright 1996-1999 by Bruce Albrecht  
 
 This program is free software; you can redistribute it and/or modify
 it under the terms as perl itself.
