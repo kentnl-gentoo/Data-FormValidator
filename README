@@ -50,6 +50,40 @@ VALIDATING INPUT
 
     The second argument is a reference to the profile you are validating.
 
+  validate()
+        my( $valids, $missings, $invalids, $unknowns ) = 
+            Data::FormValidator->validate( \%input_hash, \%dfv_profile);
+
+    "validate()" provides a deprecated alternative to "check()". It has the
+    same input syntax, but returns a four element array, described as
+    follows
+
+    valids
+        This is a hash reference to the valid fields which were submitted in
+        the data. The data may have been modified by the various filters
+        specified.
+
+    missings
+        This is a reference to an array which contains the name of the
+        missing fields. Those are the fields that the user forget to fill or
+        filled with spaces. These fields may comes from the *required* list
+        or the *dependencies* list.
+
+    invalids
+        This is a reference to an array which contains the name of the
+        fields which failed one or more of their constraint checks. If there
+        are no invalid fields, an empty arrayref will be returned.
+
+        Fields defined with multiple constraints will have an array ref
+        returned in the @invalids array instead of a string. The first
+        element in this array is the name of the field, and the remaining
+        fields are the names of the failed constraints.
+
+    unknowns
+        This is a list of fields which are unknown to the profile. Whether
+        or not this indicates an error in the user input is application
+        dependant.
+
   new()
     Using "new()" is only needed for advanced usage, including these cases:
 
@@ -159,8 +193,8 @@ INPUT PROFILE SPECIFICATION
   required_regexp
      required_regexp => qr/city|state|zipcode/,
 
-    This is a regular expression used to specify additional fields which are
-    required.
+    This is a regular expression used to specify additional field names for
+    which values will be required.
 
   require_some
      require_some => {
@@ -232,6 +266,10 @@ INPUT PROFILE SPECIFICATION
     This is a hash reference where keys are field names and values are
     defaults to use if input for the field is missing.
 
+    The values can be code refs which will be used to calculate the value if
+    needed. These code refs will be passed in the DFV::Results object as the
+    only parameter.
+
     The defaults are set shortly before the constraints are applied, and
     will be returned with the other valid data.
 
@@ -240,7 +278,7 @@ INPUT PROFILE SPECIFICATION
      filters       => ['trim'],
 
     This is a reference to an array of filters that will be applied to ALL
-    optional and required fields.
+    optional and required fields, before any constraints are applied.
 
     This can be the name of a built-in filter (trim,digit,etc) or an
     anonymous subroutine which should take one parameter, the field value
@@ -255,8 +293,12 @@ INPUT PROFILE SPECIFICATION
          cc_no => ['digit'],
      },
 
-    A hash ref with field names and keys. Values are array references of
-    field-specific filters to apply.
+    A hash ref with field names as keys. Values are array references of
+    built-in filters to apply (trim,digit,etc) or an anonymous subroutine
+    which should take one parameter, the field value and return the
+    (possibly) modified value.
+
+    Filters are applied before any constraints are applied.
 
     See Data::FormValidator::Filters for details on the built-in filters.
 
@@ -737,6 +779,11 @@ CREDITS
 
 BUGS
     <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-FormValidator>
+
+CONTRIBUTING
+    Patches, questions and feedback are welcome. This project is managed
+    using the darcs source control system ( http://www.darcs.net/ ). My
+    darcs archive is here: http://mark.stosberg.com/darcs_hive/dfv/
 
 AUTHOR
     Parts Copyright 2001-2003 by Mark Stosberg <markstos@cpan.org>, (Current

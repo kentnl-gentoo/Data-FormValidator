@@ -19,8 +19,10 @@ use Symbol;
 use Data::FormValidator::Filters qw/:filters/;
 use Data::FormValidator::Constraints (qw/:validators :matchers/);
 use vars qw/$AUTOLOAD $VERSION/;
+use overload
+  'bool' => \&_bool_overload_based_on_success;
 
-$VERSION = 4.00_02;
+$VERSION = 4.00;
 
 =pod
 
@@ -258,8 +260,14 @@ sub _process {
 	}
 
     # Fill defaults
-	while ( my ($field,$value) = each %{$profile->{defaults}} ) {
-		$valid{$field} = $value unless exists $valid{$field};
+    while ( my ($field,$value) = each %{$profile->{defaults}} ) {
+        unless(exists $valid{$field}) {
+            if (ref($value) && ref($value) eq "CODE") {
+                $valid{$field} = $value->($self);
+            } else {
+                $valid{$field} = $value;
+            }
+        }
 	}
 
     # Check for required fields
@@ -341,6 +349,12 @@ sub _process {
 
 This method returns true if there were no invalid or missing fields,
 else it returns false.
+
+As a shorthand, When the $results object is used in boolean context, it is overloaded
+to use the value of success() instead. That allows creation of a syntax like this one used
+in C<CGI::Application::Plugin::ValidateRM>:
+
+ my $results = $self->check_rm('form_display','_form_profile') || return $self->dfv_error_page;
 
 =cut
 
@@ -1017,6 +1031,11 @@ sub _add_constraints_from_map {
 			}
 	}
 	return %result;
+}
+
+sub _bool_overload_based_on_success {
+    my $results = shift;
+    return $results->success()
 }
 
 # =head2 _check_constraints()

@@ -1,4 +1,4 @@
-#
+
 #    FormValidator.pm - Object that validates form input data.
 #
 #    This file is part of Data::FormValidator.
@@ -31,7 +31,7 @@ use Data::FormValidator::Constraints (qw/:validators :matchers/);
 
 use vars qw( $VERSION $AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS );
 
-$VERSION = '4.00_02';
+$VERSION = '4.00';
 
 require Exporter;
 @ISA = qw(Exporter);
@@ -185,6 +185,47 @@ multiple values for a single key should be presented as an array reference.
 
 The second argument is a reference to the profile you are validating.
 
+=head2 validate()
+
+    my( $valids, $missings, $invalids, $unknowns ) = 
+        Data::FormValidator->validate( \%input_hash, \%dfv_profile);
+
+C<validate()> provides a deprecated alternative to C<check()>. It has the same input
+syntax, but returns a four element array, described as follows
+
+=over
+
+=item valids
+
+This is a hash reference to the valid fields which were submitted in
+the data. The data may have been modified by the various filters specified.
+
+=item missings
+
+This is a reference to an array which contains the name of the missing
+fields. Those are the fields that the user forget to fill or filled
+with spaces. These fields may comes from the I<required> list or the
+I<dependencies> list.
+
+=item invalids
+
+This is a reference to an array which contains the name of the fields which
+failed one or more of their constraint checks. If there are no invalid fields,
+an empty arrayref will be returned. 
+
+Fields defined with multiple constraints will have an array ref returned in the
+@invalids array instead of a string. The first element in this array is the
+name of the field, and the remaining fields are the names of the failed
+constraints. 
+
+=item unknowns
+
+This is a list of fields which are unknown to the profile. Whether or
+not this indicates an error in the user input is application
+dependant.
+
+=back
+
 =head2 new()
 
 Using C<new()> is only needed for advanced usage, including these cases:
@@ -270,7 +311,7 @@ sub validate {
 
     my $valid   = $data_set->valid();
     my $missing = $data_set->missing();
-    my $invalid = $data_set->{validate_invalid};
+    my $invalid = $data_set->{validate_invalid} || [];
     my $unknown = [ $data_set->unknown ];
 
     return ( $valid, $missing, $invalid, $unknown );
@@ -354,8 +395,8 @@ spaces will be reported as missing.
 
  required_regexp => qr/city|state|zipcode/,
 
-This is a regular expression used to specify additional fields which are
-required.
+This is a regular expression used to specify additional field names for which values
+will be required.
 
 =head2 require_some
 
@@ -432,17 +473,20 @@ the values are references to arrays of the field names in each group.
 This is a hash reference where keys are field names and 
 values are defaults to use if input for the field is missing. 
 
+The values can be code refs which will be used to calculate the 
+value if needed. These code refs will be passed in the DFV::Results
+object as the only parameter. 
+
 The defaults are set shortly before the constraints are applied, and
 will be returned with the other valid data.
-
 
 =head2 filters
 
  # trim leading and trailing whitespace on all fields
  filters       => ['trim'],
 
-This is a reference to an array of filters that will be applied to ALL
-optional and required fields. 
+This is a reference to an array of filters that will be applied to ALL optional
+and required fields, B<before> any constraints are applied. 
 
 This can be the name of a built-in filter
 (trim,digit,etc) or an anonymous subroutine which should take one parameter, 
@@ -458,10 +502,13 @@ See Data::FormValidator::Filters for details on the built-in filters.
      cc_no => ['digit'],
  },
 
-A hash ref with field names and keys. Values are array references
-of field-specific filters to apply.
+A hash ref with field names as keys. Values are array references of built-in
+filters to apply (trim,digit,etc) or an anonymous subroutine which should take
+one parameter, the field value and return the (possibly) modified value.
 
-See Data::FormValidator::Filters for details on the built-in filters.
+Filters are applied B<before> any constraints are applied. 
+
+See L<Data::FormValidator::Filters> for details on the built-in filters.
 
 =head2 field_filter_regexp_map
 
@@ -1098,6 +1145,12 @@ Albrecht to the MiniVend program.
 =head1 BUGS
 
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-FormValidator> 
+
+=head1 CONTRIBUTING
+
+Patches, questions and feedback are welcome. This project is managed using
+the darcs source control system ( http://www.darcs.net/ ). My darcs archive is here:
+http://mark.stosberg.com/darcs_hive/dfv/
 
 =head1 AUTHOR
 
