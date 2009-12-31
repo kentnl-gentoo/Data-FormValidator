@@ -4,9 +4,9 @@ NAME
 
 SYNOPSIS
      use Data::FormValidator;
- 
+
      my $results = Data::FormValidator->check(\%input_hash, \%dfv_profile);
- 
+
      if ($results->has_invalid or $results->has_missing) {
          # do something with $results->invalid, $results->missing
          # or  $results->msgs
@@ -51,7 +51,7 @@ VALIDATING INPUT
     The second argument is a reference to the profile you are validating.
 
   validate()
-        my( $valids, $missings, $invalids, $unknowns ) = 
+        my( $valids, $missings, $invalids, $unknowns ) =
             Data::FormValidator->validate( \%input_hash, \%dfv_profile);
 
     "validate()" provides a deprecated alternative to "check()". It has the
@@ -145,11 +145,11 @@ VALIDATING INPUT
          # and provide some defaults to new constructor
          sub check_form {
              my $self = shift;
-             my $profile = shift 
+             my $profile = shift
                 || die 'check_form: missing required profile';
- 
+
              require Data::FormValidator;
-             my $dfv = Data::FormValidator->new({},{ 
+             my $dfv = Data::FormValidator->new({},{
                 # your defaults here
              });
              return $dfv->check($self->query,$profile);
@@ -166,16 +166,16 @@ INPUT PROFILE SPECIFICATION
 
         my $profile = {
             optional => [qw( company
-                             fax 
+                             fax
                              country )],
 
-            required => [qw( fullname 
-                             phone 
-                             email 
+            required => [qw( fullname
+                             phone
+                             email
                              address )],
 
             constraint_methods => {
-                email => email(), 
+                email => email(),
             }
         };
 
@@ -199,7 +199,7 @@ INPUT PROFILE SPECIFICATION
   require_some
      require_some => {
         # require any two fields from this group
-        city_or_state_or_zipcode => [ 2, qw/city state zipcode/ ], 
+        city_or_state_or_zipcode => [ 2, qw/city state zipcode/ ],
      }
 
     This is a reference to a hash which defines groups of fields where 1 or
@@ -241,7 +241,7 @@ INPUT PROFILE SPECIFICATION
         "cc_type" => sub {
             my $dfv  = shift;
             my $type = shift;
-        
+
             return [ 'cc_cvv' ] if ($type eq "VISA" || $type eq "MASTERCARD");
             return [ ];
         },
@@ -301,7 +301,7 @@ INPUT PROFILE SPECIFICATION
 
     Note that it doesn't make sense to use a default for a field handled by
     "optional_regexp" or "required_regexp". When the field is not submitted,
-    there is no way know that it should be optional or required, and thus
+    there is no way to know that it should be optional or required, and thus
     there's no way to know that a default should be set for it.
 
   filters
@@ -321,7 +321,7 @@ INPUT PROFILE SPECIFICATION
     See Data::FormValidator::Filters for details on the built-in filters.
 
   field_filters
-     field_filters => { 
+     field_filters => {
          cc_no => ['digit'],
      },
 
@@ -393,26 +393,26 @@ INPUT PROFILE SPECIFICATION
         This will check the input and return true or false depending on the
         input's validity. By default, the constraint function receives a
         Data::FormValidator::Results object as its first argument, and the
-        value to be validated as the second. To validate a field based more
-        inputs than just the field itself, see "VALIDATING INPUT BASED ON
-        MULTIPLE FIELDS".
+        value to be validated as the second. To validate a field based on
+        more inputs than just the field itself, see "VALIDATING INPUT BASED
+        ON MULTIPLE FIELDS".
 
         Examples:
 
-         # Notice the use of 'pop'-- 
+         # Notice the use of 'pop'--
          # the object is the first arg passed to the method
          # while the value is the second, and last arg.
-         my_zipcode_field => sub { my $val = pop;  return $val =~ '/^\d{5}$/' }, 
- 
+         my_zipcode_field => sub { my $val = pop;  return $val =~ '/^\d{5}$/' },
+
          # OR you can reference a subroutine, which should work like the one above
-         my_zipcode_field => \&my_validation_routine, 
+         my_zipcode_field => \&my_validation_routine,
 
          # An example of setting the constraint name.
-         my_zipcode_field => sub { 
-                my ($dfv, $val) = @_;
-                $dfv->set_current_constraint_name('my_constraint_name');
-                return $val =~ '/^\d{5}$/' 
-                }, 
+         my_zipcode_field => sub {
+            my ($dfv, $val) = @_;
+            $dfv->set_current_constraint_name('my_constraint_name');
+            return $val =~ '/^\d{5}$/'
+         },
 
     o   an array reference
 
@@ -425,11 +425,11 @@ INPUT PROFILE SPECIFICATION
   constraint_method_regexp_map
      use Data::FormValidator::Constraints qw(:closures);
 
-     # In your profile. 
+     # In your profile.
      constraint_method_regexp_map => {
          # All fields that end in _postcode have the 'postcode' constraint applied.
          qr/_postcode$/    => postcode(),
-     },                  
+     },
 
     A hash ref where the keys are the regular expressions to use and the
     values are the constraints to apply.
@@ -447,8 +447,7 @@ INPUT PROFILE SPECIFICATION
     Untainting is based on the pattern match used by the constraint. Note
     that some constraint routines may not provide untainting.
 
-    See Writing your own constraint routines in the
-    Data::FormValidator::Constraints documentation for more information.
+    See Writing your own constraint routines for more information.
 
     This is overridden by "untaint_constraint_fields" and
     "untaint_regexp_map".
@@ -499,8 +498,8 @@ INPUT PROFILE SPECIFICATION
     just their name, just like built-in routines. You can even override the
     provided validators.
 
-    See "WRITING YOUR OWN CONSTRAINT ROUTINES" in the
-    Data::FormValidator::Constraints documentation for more information
+    See Writing your own constraint routines documentation for more
+    information
 
   msgs
     This key is used to define parameters related to formatting error
@@ -516,7 +515,7 @@ INPUT PROFILE SPECIFICATION
     The default formatting applied is designed for display in an XHTML web
     page. That formatting is as followings:
 
-        <span style="color:red;font-weight:bold"><span class="dfv_errors">* %s</span></span>
+        <span style="color:red;font-weight:bold" class="dfv_errors">* %s</span>
 
     The %s will be replaced with the message. The effect is that the message
     will appear in bold red with an asterisk before it. This style can be
@@ -528,31 +527,31 @@ INPUT PROFILE SPECIFICATION
     handling multiple constraints:
 
      msgs => {
-     
+
          # set a custom error prefix, defaults to none
          prefix=> 'error_',
- 
+
          # Set your own "Missing" message, defaults to "Missing"
          missing => 'Not Here!',
- 
+
          # Default invalid message, default's to "Invalid"
          invalid => 'Problematic!',
- 
+
          # message separator for multiple messages
          # Defaults to ' '
          invalid_separator => ' <br /> ',
- 
+
          # formatting string, default given above.
          format => 'ERROR: %s',
- 
+
          # Error messages, keyed by constraint name
          # Your constraints must be named to use this.
          constraints => {
                          'date_and_time' => 'Not a valid time format',
                          # ...
          },
- 
-         # This token will be included in the hash if there are 
+
+         # This token will be included in the hash if there are
          # any errors returned. This can be useful with templating
          # systems like HTML::Template
          # The 'prefix' setting does not apply here.
@@ -574,8 +573,8 @@ INPUT PROFILE SPECIFICATION
 
     This will be called as a Data::FormValidator::Results method. It may
     receive as arguments an additional hash reference of control parameters,
-    corresponding to the key names in the usually used in the "msgs" area of
-    the profile. You can ignore this information if you'd like.
+    corresponding to the key names usually used in the "msgs" area of the
+    profile. You can ignore this information if you'd like.
 
     If you have an alternative error message handler you'd like to share,
     stick in the "Data::FormValidator::ErrMsgs" name space and upload it to
@@ -631,7 +630,7 @@ VALIDATING INPUT BASED ON MULTIPLE FIELDS
 
     Example:
 
-     cc_no  => {  
+     cc_no  => {
          constraint  => "cc_number",
          params         => [ qw( cc_no cc_type ) ],
      },
@@ -649,8 +648,8 @@ MULTIPLE CONSTRAINTS
 
      my_zipcode_field => [
          'zip',
-         { 
-           constraint =>  '/^406/', 
+         {
+           constraint =>  '/^406/',
            name        =>  'starts_with_406',
          }
      ],
@@ -672,7 +671,7 @@ ADVANCED VALIDATION
 
 BACKWARDS COMPATIBILITY
   validate()
-        my( $valids, $missings, $invalids, $unknowns ) = 
+        my( $valids, $missings, $invalids, $unknowns ) =
             Data::FormValidator->validate( \%input_hash, \%dfv_profile);
 
     "validate()" provides a deprecated alternative to "check()". It has the
@@ -710,7 +709,7 @@ BACKWARDS COMPATIBILITY
     more versatile interface.
 
      constraints => {
-        cc_no      => {  
+        cc_no      => {
             constraint  => "cc_number",
             params        => [ qw( cc_no cc_type ) ],
         },
@@ -741,7 +740,7 @@ BACKWARDS COMPATIBILITY
     "constraint_methods" and "$self-\"name_this('foo')>.
 
      # supply multiple parameters
-     cc_no  => {  
+     cc_no  => {
          constraint  => "cc_number",
          params      => [ qw( cc_no cc_type ) ],
      },
@@ -781,7 +780,7 @@ BACKWARDS COMPATIBILITY
      constraint_regexp_map => {
          # All fields that end in _postcode have the 'postcode' constraint applied.
          qr/_postcode$/    => 'postcode',
-     },                  
+     },
 
     A hash ref where the keys are the regular expressions to use and the
     values are the constraints to apply.

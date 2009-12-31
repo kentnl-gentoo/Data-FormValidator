@@ -1,12 +1,41 @@
---- #YAML:1.0
-name: Data-FormValidator
-version: 4.63
+---
+abstract: "Validates user input (usually from an HTML form) based\non input profile."
 author:
-  - Mark Stosberg <mark@summersault.com>
-abstract: |-
-  Validates user input (usually from an HTML form) based
-  on input profile.
+  - 'Mark Stosberg <mark@summersault.com>'
+build_requires:
+  CGI: 3.48
+configure_requires:
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3601'
 license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Data-FormValidator
+provides:
+  Data::FormValidator:
+    file: lib/Data/FormValidator.pm
+    version: 4.65
+  Data::FormValidator::Constraints:
+    file: lib/Data/FormValidator/Constraints.pm
+    version: 4.65
+  Data::FormValidator::Constraints::Dates:
+    file: lib/Data/FormValidator/Constraints/Dates.pm
+    version: 4.65
+  Data::FormValidator::Constraints::RegexpCommon:
+    file: lib/Data/FormValidator/Results.pm
+  Data::FormValidator::Constraints::Upload:
+    file: lib/Data/FormValidator/Constraints/Upload.pm
+    version: 4.65
+  Data::FormValidator::ConstraintsFactory:
+    file: lib/Data/FormValidator/ConstraintsFactory.pm
+    version: 1.7
+  Data::FormValidator::Filters:
+    file: lib/Data/FormValidator/Filters.pm
+    version: 4.65
+  Data::FormValidator::Results:
+    file: lib/Data/FormValidator/Results.pm
+    version: 4.65
 requires:
   Date::Calc: 5
   Email::Valid: 0
@@ -19,29 +48,6 @@ requires:
   Test::More: 0
   overload: 0
   perl: 5.008
-provides:
-  Data::FormValidator:
-    file: lib/Data/FormValidator.pm
-    version: 4.63
-  Data::FormValidator::Constraints:
-    file: lib/Data/FormValidator/Constraints.pm
-    version: 4.63
-  Data::FormValidator::Constraints::Dates:
-    file: lib/Data/FormValidator/Constraints/Dates.pm
-    version: 4.62
-  Data::FormValidator::Constraints::RegexpCommon:
-    file: lib/Data/FormValidator/Results.pm
-    version: 4.62
-  Data::FormValidator::Constraints::Upload:
-    file: lib/Data/FormValidator/Constraints/Upload.pm
-    version: 4.62
-  Data::FormValidator::ConstraintsFactory:
-    file: lib/Data/FormValidator/ConstraintsFactory.pm
-    version: 1.7
-  Data::FormValidator::Filters:
-    file: lib/Data/FormValidator/Filters.pm
-    version: 4.62
-  Data::FormValidator::Results:
-    file: lib/Data/FormValidator/Results.pm
-    version: 4.62
-generated_by: Module::Build version 0.2611
+resources:
+  license: http://dev.perl.org/licenses/
+version: 4.65

@@ -6,36 +6,37 @@
 #
 #    Copyright (C) 1999,2000 iNsu Innovations Inc.
 #
-#    This program is free software; you can redistribute it and/or modify 
-#    it under the terms same terms as perl itself.  
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms same terms as perl itself.
 
 package Data::FormValidator::Filters;
 use strict;
 use vars qw/$AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS $VERSION/;
 
-$VERSION = 4.62;
+$VERSION = 4.65;
 
 require Exporter;
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(
     filter_alphanum
-	filter_decimal
-	filter_digit
-	filter_dollars
-	filter_integer
-	filter_lc
-	filter_neg_decimal
-	filter_neg_integer
-	filter_phone
-	filter_pos_decimal
-	filter_pos_integer
-	filter_quotemeta
-	filter_sql_wildcard
-	filter_strip
-	filter_trim
-	filter_uc
-	filter_ucfirst
+    filter_decimal
+    filter_digit
+    filter_dollars
+    filter_integer
+    filter_lc
+    filter_neg_decimal
+    filter_neg_integer
+    filter_phone
+    filter_pos_decimal
+    filter_pos_integer
+    filter_quotemeta
+    filter_sql_wildcard
+    filter_strip
+    filter_trim
+    filter_uc
+    filter_ucfirst
     FV_split
+    FV_replace
 );
 
 %EXPORT_TAGS = (
@@ -65,22 +66,22 @@ Data::FormValidator::Filters - Basic set of filters available in an Data::FormVa
 
 These are the builtin filters which may be specified as a name in the
 I<filters>, I<field_filters>, and I<field_filter_regexp_map> parameters of the
-input profile. 
+input profile.
 
 Filters are applied as the first step of validation, possibly modifying a copy
-of the validation before any constraints are checked. 
+of the validation before any constraints are checked.
 
 =head1 RECOMMENDED USE
 
 As a long time maintainer and user of Data::FormValidator, I recommend that
 filters be used with caution. They are immediately modifying the input
 provided, so the original data is lost. The few I recommend include C<trim>,
-which removes leading and trailing whitespace. I have this turned on by default 
+which removes leading and trailing whitespace. I have this turned on by default
 by using L<CGI::Application::Plugin::ValidateRM>. It's also generally safe to use
-the C<lc> and C<uc> filters if you need that kind of data transformation. 
+the C<lc> and C<uc> filters if you need that kind of data transformation.
 
 Beyond simple filters, I recommend transforming the C<"valid"> hash returned
-from validation if further changes are needed. 
+from validation if further changes are needed.
 
 =head1 PROCEDURAL INTERFACE
 
@@ -104,12 +105,12 @@ Notice that when you call filters directly, you'll need to prefix the filter nam
 
   use Data::FormValidator::Filters qw(FV_split);
 
-  # Validate every e-mail in a comma separated list 
+  # Validate every e-mail in a comma separated list
 
   field_filters => {
      several_emails  => FV_split(qr/\s*,\s*/),
 
-     # Any pattern that can be used by the 'split' builtin works. 
+     # Any pattern that can be used by the 'split' builtin works.
      tab_sep_field   => FV_split('\t'),
   },
   constraint_methods => {
@@ -117,11 +118,11 @@ Notice that when you call filters directly, you'll need to prefix the filter nam
   },
 
 With this filter, you can split a field into multiple values. The constraint for
-the field will then be applied to every value. 
+the field will then be applied to every value.
 
 This filter has a different naming convention because it is a higher-order
 function.  Rather than returning a value directly, it returns a code reference
-to a standard Data::FormValidator filter. 
+to a standard Data::FormValidator filter.
 
 After successfully being validated the values will appear as an arrayref.
 
@@ -129,11 +130,37 @@ After successfully being validated the values will appear as an arrayref.
 
 sub FV_split {
     my $splitter = shift || die "nothing to split on!";
-    return sub { 
+    return sub {
         my $value = shift;
         return undef unless defined $value;
-        my @a = split $splitter, $value; 
-        return \@a; 
+        my @a = split $splitter, $value;
+        return \@a;
+    };
+}
+
+=head2 FV_replace
+
+  use Data::FormValidator::Filters qw(FV_replace);
+
+  field_filters => {
+     first_name   => FV_replace(qr/Mark/,'Don'),
+  },
+
+FV_replace is a shorthand for writing simple find-and-replace filters.
+The above filter would be translated to this:
+
+ sub { my $v = shift; $v =~ s/Mark/Don/; $v }
+
+For more complex filters, just write your own.
+
+=cut
+
+sub FV_replace {
+    my ($find,$replace) = @_;
+    return sub {
+        my $v = shift;
+        $v =~ s/$find/$replace/;
+        return $v;
     };
 }
 
@@ -145,7 +172,7 @@ Remove white space at the front and end of the fields.
 
 sub filter_trim {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
 
     # Remove whitespace at the front
     $value =~ s/^\s+//o;
@@ -166,7 +193,7 @@ Runs of white space are replaced by a single space.
 
 sub filter_strip {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
 
     # Strip whitespace
     $value =~ s/\s+/ /g;
@@ -184,7 +211,7 @@ Remove non digits characters from the input.
 
 sub filter_digit {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
 
     $value =~ s/\D//g;
 
@@ -201,7 +228,7 @@ Remove non alphanumeric characters from the input.
 
 sub filter_alphanum {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
     $value =~ s/\W//g;
     return $value;
 }
@@ -216,7 +243,7 @@ Extract from its input a valid integer number.
 
 sub filter_integer {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
     $value =~ tr/0-9+-//dc;
     ($value) =~ m/([-+]?\d+)/;
     return $value;
@@ -234,7 +261,7 @@ Bugs: This filter won't extract "9" from "a9+", it will instead extract "9+"
 
 sub filter_pos_integer {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
     $value =~ tr/0-9+//dc;
     ($value) =~ m/(\+?\d+)/;
     return $value;
@@ -247,13 +274,13 @@ sub filter_pos_integer {
 Extract from its input a valid negative integer number.
 
 Bugs: This filter will currently filter the case of "a9-" to become "9-",
-which it should leave it alone. 
+which it should leave it alone.
 
 =cut
 
 sub filter_neg_integer {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
     $value =~ tr/0-9-//dc;
     ($value) =~ m/(-\d+)/;
     return $value;
@@ -271,7 +298,7 @@ Bugs: Given "1,000.23", it will currently return "1.000.23"
 
 sub filter_decimal {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
     # This is a localization problem, but anyhow...
     $value =~ tr/,/./;
     $value =~ tr/0-9.+-//dc;
@@ -291,7 +318,7 @@ Bugs: Given "1,000.23", it will currently return "1.000.23"
 
 sub filter_pos_decimal {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
     # This is a localization problem, but anyhow...
     $value =~ tr/,/./;
     $value =~ tr/0-9.+//dc;
@@ -311,7 +338,7 @@ Bugs: Given "1,000.23", it will currently return "1.000.23"
 
 sub filter_neg_decimal {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
     # This is a localization problem, but anyhow...
     $value =~ tr/,/./;
     $value =~ tr/0-9.-//dc;
@@ -331,7 +358,7 @@ Bugs: This filter won't currently remove trailing numbers like "1.234".
 
 sub filter_dollars {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
     $value =~ tr/,/./;
     $value =~ tr/0-9.+-//dc;
     ($value) =~ m/(\d+\.?\d?\d?)/;
@@ -349,7 +376,7 @@ accept digits [0-9], space, comma, minus, parenthesis, period and pound [#].)
 
 sub filter_phone {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
     $value =~ s/[^\d,\(\)\.\s,\-#]//g;
     return $value;
 }
@@ -364,7 +391,7 @@ Transforms shell glob wildcard (*) to the SQL like wildcard (%).
 
 sub filter_sql_wildcard {
     my $value = shift;
-	return unless defined $value;
+    return unless defined $value;
     $value =~ tr/*/%/;
     return $value;
 }
@@ -379,7 +406,7 @@ input.
 =cut
 
 sub filter_quotemeta {
-	return unless defined $_[0];
+    return unless defined $_[0];
     quotemeta $_[0];
 }
 
@@ -392,7 +419,7 @@ Calls the lc (convert to lowercase) builtin on its input.
 =cut
 
 sub filter_lc {
-	return unless defined $_[0];
+    return unless defined $_[0];
     lc $_[0];
 }
 
@@ -405,7 +432,7 @@ Calls the uc (convert to uppercase) builtin on its input.
 =cut
 
 sub filter_uc {
-	return unless defined $_[0];
+    return unless defined $_[0];
     uc $_[0];
 }
 
@@ -418,7 +445,7 @@ Calls the ucfirst (Uppercase first letter) builtin on its input.
 =cut
 
 sub filter_ucfirst {
-	return unless defined $_[0];
+    return unless defined $_[0];
     ucfirst $_[0];
 }
 
