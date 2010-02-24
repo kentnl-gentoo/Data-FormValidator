@@ -1,5 +1,10 @@
 Build.PL
 Changes
+MANIFEST			This list of files
+MANIFEST.SKIP
+META.yml
+README
+RELEASE_NOTES
 lib/Data/FormValidator.pm
 lib/Data/FormValidator/Constraints.pm
 lib/Data/FormValidator/Constraints/Dates.pm
@@ -7,11 +12,6 @@ lib/Data/FormValidator/Constraints/Upload.pm
 lib/Data/FormValidator/ConstraintsFactory.pm
 lib/Data/FormValidator/Filters.pm
 lib/Data/FormValidator/Results.pm
-MANIFEST			This list of files
-MANIFEST.SKIP
-META.yml
-README
-RELEASE_NOTES
 t/00_base.t
 t/02_code_ref.t
 t/03_dependency.t
@@ -33,11 +33,13 @@ t/26_qr.t
 t/27_qualify_ref_happy_death.t
 t/28_defaults_for_new.t
 t/30_filter_definedness.t
+t/FV_length.t
+t/ValidatorPackagesTest1.pm
+t/ValidatorPackagesTest2.pm
 t/any_errors.t
 t/check_profile_syntax.t
 t/constraint_method.t
 t/constraint_method_string.t
-t/constraint_method_zero.t
 t/constraint_regexp_map_profile_reuse.t
 t/constraints_builtin.t
 t/constraints_builtin_closure.t
@@ -53,7 +55,6 @@ t/dependency_groups.t
 t/filter_constraints.t
 t/filters_builtin.t
 t/filters_shouldnt_modify.t
-t/FV_length.t
 t/get_filtered_data.t
 t/get_input_data.t
 t/missing_optional.t
@@ -76,7 +77,5 @@ t/upload.t
 t/upload_closure.t
 t/upload_mime_types.t
 t/upload_post_text.txt
-t/ValidatorPackagesTest1.pm
-t/ValidatorPackagesTest2.pm
 test/00_base.badformat
 test/00_base.profile

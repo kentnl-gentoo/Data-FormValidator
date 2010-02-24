@@ -82,7 +82,7 @@ VALIDATING INPUT
     unknowns
         This is a list of fields which are unknown to the profile. Whether
         or not this indicates an error in the user input is application
-        dependant.
+        dependent.
 
   new()
     Using "new()" is only needed for advanced usage, including these cases:
@@ -701,7 +701,7 @@ BACKWARDS COMPATIBILITY
     unknowns
         This is a list of fields which are unknown to the profile. Whether
         or not this indicates an error in the user input is application
-        dependant.
+        dependent.
 
   constraints (profile key)
     This is a supported but deprecated profile key. Using

@@ -33,7 +33,7 @@ use Data::FormValidator::Constraints qw(:validators :matchers);
 
 use vars qw( $VERSION $AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS );
 
-$VERSION = '4.65';
+$VERSION = '4.66';
 
 require Exporter;
 @ISA = qw(Exporter);
@@ -224,7 +224,7 @@ constraints.
 
 This is a list of fields which are unknown to the profile. Whether or
 not this indicates an error in the user input is application
-dependant.
+dependent.
 
 =back
 
@@ -1087,7 +1087,7 @@ constraints.
 
 This is a list of fields which are unknown to the profile. Whether or
 not this indicates an error in the user input is application
-dependant.
+dependent.
 
 =back
 
