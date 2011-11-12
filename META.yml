@@ -19,10 +19,10 @@ no_index:
 provides:
   Data::FormValidator:
     file: lib/Data/FormValidator.pm
-    version: 4.67
+    version: 4.70
   Data::FormValidator::Constraints:
     file: lib/Data/FormValidator/Constraints.pm
-    version: 4.65
+    version: 4.7
   Data::FormValidator::Constraints::Dates:
     file: lib/Data/FormValidator/Constraints/Dates.pm
     version: 4.65
@@ -40,7 +40,7 @@ provides:
     version: 4.65
   Data::FormValidator::Results:
     file: lib/Data/FormValidator/Results.pm
-    version: 4.65
+    version: 4.7
 requires:
   Date::Calc: 5
   Email::Valid: 0
@@ -56,4 +56,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://mark.stosberg.com/darcs_hive/dfv/
-version: 4.67
+version: 4.70

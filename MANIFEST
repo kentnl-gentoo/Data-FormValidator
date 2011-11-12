@@ -65,6 +65,7 @@ t/procedural_valid.t
 t/profile_checking.t
 t/regexp_common.t
 t/regexp_common_closure.t
+t/rename_builtin_constraints.t
 t/results_success.t
 t/simple.t
 t/tt_and_overload.t
