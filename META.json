@@ -4,7 +4,7 @@
       "Mark Stosberg <mark@summersault.com>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.110930",
+   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.112150",
    "license" : [
       "perl_5"
    ],
@@ -48,7 +48,7 @@
    "provides" : {
       "Data::FormValidator" : {
          "file" : "lib/Data/FormValidator.pm",
-         "version" : "4.70"
+         "version" : "4.71"
       },
       "Data::FormValidator::Constraints" : {
          "file" : "lib/Data/FormValidator/Constraints.pm",
@@ -76,7 +76,7 @@
       },
       "Data::FormValidator::Results" : {
          "file" : "lib/Data/FormValidator/Results.pm",
-         "version" : "4.7"
+         "version" : "4.71"
       }
    },
    "release_status" : "stable",
@@ -88,5 +88,5 @@
          "url" : "http://mark.stosberg.com/darcs_hive/dfv/"
       }
    },
-   "version" : "4.70"
+   "version" : "4.71"
 }

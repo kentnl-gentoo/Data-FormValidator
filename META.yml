@@ -7,7 +7,7 @@ build_requires:
 configure_requires:
   Module::Build: 0.38
 dynamic_config: 1
-generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.110930'
+generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.112150'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -19,7 +19,7 @@ no_index:
 provides:
   Data::FormValidator:
     file: lib/Data/FormValidator.pm
-    version: 4.70
+    version: 4.71
   Data::FormValidator::Constraints:
     file: lib/Data/FormValidator/Constraints.pm
     version: 4.7
@@ -40,7 +40,7 @@ provides:
     version: 4.65
   Data::FormValidator::Results:
     file: lib/Data/FormValidator/Results.pm
-    version: 4.7
+    version: 4.71
 requires:
   Date::Calc: 5
   Email::Valid: 0
@@ -56,4 +56,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://mark.stosberg.com/darcs_hive/dfv/
-version: 4.70
+version: 4.71
