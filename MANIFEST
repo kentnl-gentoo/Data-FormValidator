@@ -9,9 +9,6 @@ lib/Data/FormValidator/Filters.pm
 lib/Data/FormValidator/Results.pm
 MANIFEST			This list of files
 MANIFEST.SKIP
-META.json
-META.yml
-README
 RELEASE_NOTES
 t/00_base.t
 t/02_code_ref.t
@@ -45,6 +42,7 @@ t/constraints_builtin.t
 t/constraints_builtin_closure.t
 t/constraints_factory.t
 t/constraints_invalid_once_only.t
+t/constraints_num_values.t
 t/constraints_regexp_map_interaction.t
 t/constraints_reuse.t
 t/credit_card.t
@@ -83,3 +81,5 @@ t/ValidatorPackagesTest1.pm
 t/ValidatorPackagesTest2.pm
 test/00_base.badformat
 test/00_base.profile
+META.yml
+META.json

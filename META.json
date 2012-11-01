@@ -48,11 +48,11 @@
    "provides" : {
       "Data::FormValidator" : {
          "file" : "lib/Data/FormValidator.pm",
-         "version" : "4.71"
+         "version" : "4.80"
       },
       "Data::FormValidator::Constraints" : {
          "file" : "lib/Data/FormValidator/Constraints.pm",
-         "version" : "4.7"
+         "version" : "4.8"
       },
       "Data::FormValidator::Constraints::Dates" : {
          "file" : "lib/Data/FormValidator/Constraints/Dates.pm",
@@ -88,5 +88,5 @@
          "url" : "http://mark.stosberg.com/darcs_hive/dfv/"
       }
    },
-   "version" : "4.71"
+   "version" : "4.80"
 }
