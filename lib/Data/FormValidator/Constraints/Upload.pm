@@ -1,10 +1,6 @@
 package Data::FormValidator::Constraints::Upload;
-
+use Exporter 'import';
 use strict;
-
-require Exporter;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
-@ISA = qw(Exporter);
 
 # Items to export into callers namespace by default. Note: do not export
 # names by default without a very good reason. Use EXPORT_OK instead.
@@ -14,21 +10,21 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 # If you do not need this, moving things directly into @EXPORT or @EXPORT_OK
 # will save memory.
 
-@EXPORT = qw(
+our @EXPORT = qw(
     valid_file_format
     valid_image_max_dimensions
     valid_file_max_bytes
     valid_image_min_dimensions
 );
 
-@EXPORT_OK = qw(
+our @EXPORT_OK = qw(
     file_format
     image_max_dimensions
     file_max_bytes
     image_min_dimensions
 );
 
-$VERSION = 4.65;
+our $VERSION = 4.81;
 
 sub file_format {
     my %params = @_;
@@ -471,7 +467,7 @@ The meta data added is C<width> and C<height>.
 
 An older more awkward interface to the constraints in this module is still supported.
 To use it, you have to load the package with 'validator_packages', and call each
-constraint in a hashref style, passing the the parameters by reference. It looks
+constraint in a hashref style, passing the parameters by reference. It looks
 like this:
 
     validator_packages => [qw(Data::FormValidator::Constraints::Upload)],

@@ -4,7 +4,7 @@
       "Mark Stosberg <mark@summersault.com>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.112150",
+   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -32,15 +32,15 @@
       "runtime" : {
          "requires" : {
             "Date::Calc" : "5",
-            "Email::Valid" : 0,
+            "Email::Valid" : "0",
             "File::MMagic" : "1.17",
-            "Image::Size" : 0,
+            "Image::Size" : "0",
             "MIME::Types" : "1.005",
             "Perl6::Junction" : "1.1",
-            "Regexp::Common" : 0,
-            "Scalar::Util" : 0,
-            "Test::More" : 0,
-            "overload" : 0,
+            "Regexp::Common" : "0",
+            "Scalar::Util" : "0",
+            "Test::More" : "0",
+            "overload" : "0",
             "perl" : "5.008"
          }
       }
@@ -48,15 +48,15 @@
    "provides" : {
       "Data::FormValidator" : {
          "file" : "lib/Data/FormValidator.pm",
-         "version" : "4.80"
+         "version" : "4.81"
       },
       "Data::FormValidator::Constraints" : {
          "file" : "lib/Data/FormValidator/Constraints.pm",
-         "version" : "4.8"
+         "version" : "4.81"
       },
       "Data::FormValidator::Constraints::Dates" : {
          "file" : "lib/Data/FormValidator/Constraints/Dates.pm",
-         "version" : "4.65"
+         "version" : "4.81"
       },
       "Data::FormValidator::Constraints::RegexpCommon" : {
          "file" : "lib/Data/FormValidator/Results.pm",
@@ -64,19 +64,19 @@
       },
       "Data::FormValidator::Constraints::Upload" : {
          "file" : "lib/Data/FormValidator/Constraints/Upload.pm",
-         "version" : "4.65"
+         "version" : "4.81"
       },
       "Data::FormValidator::ConstraintsFactory" : {
          "file" : "lib/Data/FormValidator/ConstraintsFactory.pm",
-         "version" : "1.7"
+         "version" : "4.81"
       },
       "Data::FormValidator::Filters" : {
          "file" : "lib/Data/FormValidator/Filters.pm",
-         "version" : "4.65"
+         "version" : "4.81"
       },
       "Data::FormValidator::Results" : {
          "file" : "lib/Data/FormValidator/Results.pm",
-         "version" : "4.71"
+         "version" : "4.81"
       }
    },
    "release_status" : "stable",
@@ -88,5 +88,5 @@
          "url" : "http://mark.stosberg.com/darcs_hive/dfv/"
       }
    },
-   "version" : "4.80"
+   "version" : "4.81"
 }
