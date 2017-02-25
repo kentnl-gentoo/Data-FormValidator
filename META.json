@@ -55,6 +55,6 @@
          "web" : "https://github.com/dnmfarrell/Data-FormValidator"
       }
    },
-   "version" : "4.84",
+   "version" : 4.85,
    "x_serialization_backend" : "JSON::PP version 2.27300"
 }
