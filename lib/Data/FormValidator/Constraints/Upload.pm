@@ -24,7 +24,7 @@ our @EXPORT_OK = qw(
     image_min_dimensions
 );
 
-our $VERSION = 4.85;
+our $VERSION = 4.86;
 
 sub file_format {
     my %params = @_;
@@ -302,7 +302,10 @@ sub _get_upload_fh
     # we might not have something -seekable-.
     use IO::File;
 
-    if (ref $q->{$field} eq 'IO::File') {
+    # If we we already have an IO::File object, return it, otherwise create one.
+    require Scalar::Util;
+
+    if ( Scalar::Util::blessed($q->{$field}) && $q->{$field}->isa('IO::File') ) {
         return $q->{$field};
     }
     else {

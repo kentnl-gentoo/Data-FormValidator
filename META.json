@@ -1,7 +1,7 @@
 {
    "abstract" : "Validates user input (usually from an HTML form) based on input profile.",
    "author" : [
-      "Mark Stosberg <mark@summersault.com>"
+      "David Farrell <dfarrell@cpan.org>"
    ],
    "dynamic_config" : 1,
    "generated_by" : "ExtUtils::MakeMaker version 7.1001, CPAN::Meta::Converter version 2.150005",
@@ -55,6 +55,6 @@
          "web" : "https://github.com/dnmfarrell/Data-FormValidator"
       }
    },
-   "version" : 4.85,
+   "version" : 4.86,
    "x_serialization_backend" : "JSON::PP version 2.27300"
 }
